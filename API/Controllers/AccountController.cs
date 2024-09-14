@@ -6,28 +6,28 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using API.Data;
+using API.DTOs;
 using API.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
     public class AccountController(DataContext context) : BaseApiController
     {
-        // public AccountController()
-        // {
-        // }
 
-        [HttpPost("register")]
-        
-        public async Task<ActionResult<AppUser>> Register(string username, string password)
+        [HttpPost("register")]       
+        public async Task<ActionResult<AppUser>> Register(RegisterDto registerDto)
         {
+            if(await UserExists(registerDto.Username))return BadRequest("Username already exists");
+
             using var hmack = new HMACSHA512();
 
             var user = new AppUser
             {
-                UserName = username,
-                PasswordHash = hmack.ComputeHash(Encoding.UTF8.GetBytes(password)),
+                UserName = registerDto.Username.ToLower(),
+                PasswordHash = hmack.ComputeHash(Encoding.UTF8.GetBytes(registerDto.Password)),
                 PasswordSalt = hmack.Key
                 
             };
@@ -37,5 +37,11 @@ namespace API.Controllers
             return user;
 
         }
+        private async Task<bool> UserExists(string username)
+        {
+            return await context.Users.AnyAsync(x=> x.UserName.ToLower() == username);
+
+        }
+        
     }
 }
