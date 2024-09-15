@@ -12,15 +12,15 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
-builder.Services.AddDbContext<DataContext>(options =>
-{
-    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
-});
+// builder.Services.AddControllers();
+// builder.Services.AddDbContext<DataContext>(options =>
+// {
+//     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
+// });
 
-builder.Services.AddCors();
+// builder.Services.AddCors();
 
-builder.Services.AddScoped<ITokenService,TokenService>();
+// builder.Services.AddScoped<ITokenService,TokenService>();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 .AddJwtBearer(options=>{
