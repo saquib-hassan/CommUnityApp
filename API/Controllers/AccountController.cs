@@ -16,10 +16,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
-    [Authorize]
     public class AccountController(DataContext context,ITokenService tokenService) : BaseApiController
     {
-        [AllowAnonymous]
 
         [HttpPost("register")]       
         public async Task<ActionResult<UserDto>> Register(RegisterDto registerDto)
@@ -44,7 +42,7 @@ namespace API.Controllers
             };
 
         }
-        [Authorize]
+        
         [HttpPost("login")]
         public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
         {
