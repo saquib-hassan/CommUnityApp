@@ -9,6 +9,6 @@ export class AccountService {
   baseUrl = 'https://localhost:5001/api/';
 
   login(model: any) {
-    return this.http.post(this.baseUrl + 'acoount/login', model);
+    return this.http.post(this.baseUrl + 'account/login', model);
   }
 }
