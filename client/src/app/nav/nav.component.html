@@ -13,6 +13,8 @@
       <span class="navbar-toggler-icon"></span>
     </button> -->
 
+    @if(loggedIn){
+
     <ul class="navbar-nav me-auto mb-2 mb-md-0">
       <li class="nav-item">
         <a class="nav-link">Matches</a>
@@ -26,6 +28,8 @@
         <a class="nav-link">Messages</a>
       </li>
     </ul>
+    }
+
     <form
       #loginForm="ngForm"
       (ngSubmit)="login()"
