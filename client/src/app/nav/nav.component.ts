@@ -29,4 +29,3 @@ export class NavComponent {
     this.loggedIn = false;
   }
 }
-//signals
