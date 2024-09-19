@@ -14,7 +14,11 @@ namespace API.Extensions
         public static IServiceCollection AddApplicationService(this IServiceCollection services,
          IConfiguration config)
         {
-            services.AddControllers();
+
+            // services.AddControllers().AddJsonOptions(options =>
+            // {
+            //     options.JsonSerializerOptions.PropertyNamingPolicy = null;
+            // }); 
             services.AddDbContext<DataContext>(options =>
             {
                 options.UseSqlite(config.GetConnectionString("DefaultConnection"));
