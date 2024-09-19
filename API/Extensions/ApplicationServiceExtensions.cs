@@ -14,6 +14,7 @@ namespace API.Extensions
         public static IServiceCollection AddApplicationService(this IServiceCollection services,
          IConfiguration config)
         {
+            services.AddControllers();
 
             // services.AddControllers().AddJsonOptions(options =>
             // {
