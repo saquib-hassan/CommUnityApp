@@ -16,13 +16,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
-    public class AccountController(DataContext context,ITokenService tokenService) : BaseApiController
+    public class AccountController(DataContext context, ITokenService tokenService) : BaseApiController
     {
 
-        [HttpPost("register")]       
+        [HttpPost("register")]
         public async Task<ActionResult<UserDto>> Register(RegisterDto registerDto)
         {
-            if(await UserExists(registerDto.Username))return BadRequest("Username already exists");
+            if (await UserExists(registerDto.Username)) return BadRequest("Username already exists");
 
             using var hmack = new HMACSHA512();
 
@@ -31,24 +31,25 @@ namespace API.Controllers
                 UserName = registerDto.Username.ToLower(),
                 PasswordHash = hmack.ComputeHash(Encoding.UTF8.GetBytes(registerDto.Password)),
                 PasswordSalt = hmack.Key
-                
+
             };
 
             context.Users.Add(user);
             await context.SaveChangesAsync();
-            return new UserDto{
+            return new UserDto
+            {
                 Username = user.UserName,
                 Token = tokenService.CreateToken(user)
             };
 
         }
-        
+
         [HttpPost("login")]
         public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
         {
-            var user = await context.Users.FirstOrDefaultAsync(x=> x.UserName == loginDto.Username.ToLower());
+            var user = await context.Users.FirstOrDefaultAsync(x => x.UserName == loginDto.Username.ToLower());
 
-            if(user == null) return Unauthorized("Invalid Username");
+            if (user == null) return Unauthorized("Invalid Username");
 
             using var hmack = new HMACSHA512(user.PasswordSalt);
 
@@ -56,9 +57,10 @@ namespace API.Controllers
 
             for (int i = 0; i < computedHash.Length; i++)
             {
-                if(computedHash[i] != user.PasswordHash[i]) return Unauthorized("Invalid Password");
+                if (computedHash[i] != user.PasswordHash[i]) return Unauthorized("Invalid Password");
             }
-            return new UserDto{
+            return new UserDto
+            {
                 Username = user.UserName,
                 Token = tokenService.CreateToken(user)
             };
@@ -66,9 +68,9 @@ namespace API.Controllers
         }
         private async Task<bool> UserExists(string username)
         {
-            return await context.Users.AnyAsync(x=> x.UserName.ToLower() == username.ToLower());
+            return await context.Users.AnyAsync(x => x.UserName.ToLower() == username.ToLower());
 
         }
-        
+
     }
 }
