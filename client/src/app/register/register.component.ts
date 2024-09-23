@@ -1,4 +1,4 @@
-import { Component, Input, output, Output } from '@angular/core';
+import { Component, input, Input, output, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 @Component({
@@ -10,7 +10,7 @@ import { FormsModule } from '@angular/forms';
 })
 export class RegisterComponent {
   model: any = {};
-  @Input() userFromHomeComponent: any;
+  userFromHomeComponent = input.required<any>();
   cancelRegister = output<boolean>();
   register() {
     console.log(this.model);
